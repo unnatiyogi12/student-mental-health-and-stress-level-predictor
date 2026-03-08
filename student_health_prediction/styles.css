@@ -1,0 +1,108 @@
+/* AI Health Monitor - Custom Styles */
+
+.main-header {
+    font-size: 3rem;
+    font-weight: bold;
+    background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.stress-card {
+    padding: 20px;
+    border-radius: 10px;
+    margin: 10px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.high-stress {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    color: white;
+}
+
+.medium-stress {
+    background: linear-gradient(135deg, #ffd93d, #ffb142);
+    color: black;
+}
+
+.low-stress {
+    background: linear-gradient(135deg, #6bcf7f, #4ecdc4);
+    color: white;
+}
+
+.metric-card {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 5px;
+    text-align: center;
+}
+
+.sidebar-header {
+    color: #667eea;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* Enhanced button styling */
+.stButton>button {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.stButton>button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Metric styling */
+[data-testid="metric-container"] {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Column spacing */
+.css-1d391kg {
+    padding: 1rem;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg, #5a67d8, #6b46c1);
+}
+
+/* Responsive design improvements */
+@media (max-width: 768px) {
+    .main-header {
+        font-size: 2rem;
+    }
+
+    .stress-card {
+        padding: 15px;
+    }
+}
