@@ -1,19 +1,22 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import os
 import plotly.express as px
 import plotly.graph_objects as go
+from report_generator import generate_report
 
-# Load models
-student_model = joblib.load("student_stress_model.pkl")
-health_model = joblib.load("health_stress_model.pkl")
+BASE_DIR = os.path.dirname(__file__)
+
+student_model = joblib.load(os.path.join(BASE_DIR, "student_stress_model.pkl"))
+health_model = joblib.load(os.path.join(BASE_DIR, "health_stress_model.pkl"))
 
 # Load custom CSS
 def load_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-
-load_css("styles.css")
+        
+load_css(os.path.join(BASE_DIR, "styles.css"))
 
 st.set_page_config(
     page_title="AI Health Monitor",
@@ -22,7 +25,6 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Enhanced Header
 st.markdown('<h1 class="main-header">🧠 AI Health Monitor & Stress Analyzer</h1>', unsafe_allow_html=True)
 st.markdown("""
 <div style='text-align: center; margin-bottom: 2rem;'>
@@ -30,9 +32,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# -----------------------------
-# User Inputs
-# -----------------------------
 
 with st.sidebar:
     st.markdown('<h2 class="sidebar-header">📝 Input Your Data</h2>', unsafe_allow_html=True)
@@ -55,7 +54,6 @@ with st.sidebar:
 
     st.markdown("---")
 
-    # Health Section
     st.markdown("### 🏥 Health Metrics")
     col3, col4 = st.columns(2)
     with col3:
@@ -84,7 +82,7 @@ with col2:
 
 if analyze_button:
 
-    # Student model input
+    
     student_input = pd.DataFrame({
         "Physical Activity (hrs/week)": [physical_activity],
         "Screen Time (hrs/day)": [screen_time],
@@ -95,7 +93,7 @@ if analyze_button:
 
     student_pred = student_model.predict(student_input)[0]
 
-    # Health model input
+    
     health_input = pd.DataFrame({
         "Gender":[Gender],    
         "Age":[Age],
@@ -111,13 +109,9 @@ if analyze_button:
 
     health_pred = health_model.predict(health_input)[0]
 
-    # Map student model predictions (1, 2, 3 → Low, Medium, High)
     student_stress_map = {1: "Low", 2: "Medium", 3: "High"}
     student_pred_text = student_stress_map.get(student_pred, str(student_pred))
     
-    # Map health model predictions (3-8 scale → Low, Medium, High)
-    # Health dataset ranges: Low (3-5), Medium (5-6.5), High (6.5-8)
-
     if health_pred <= 5:
         health_pred_text = "Low"
     elif health_pred <= 6.5:
@@ -223,6 +217,16 @@ if analyze_button:
 
     col_left, col_right = st.columns(2)
 
+    report_path = generate_report(final_stress, heart_rate, daily_steps, sleep_duration)
+
+    with open(report_path, "rb") as file:
+        st.download_button(
+            label="📥 Download Health Report",
+            data=file,
+            file_name="health_report.pdf",
+            mime="application/pdf"
+        )
+
     with col_left:
         st.subheader("🔍 Possible Causes")
         if causes:
@@ -313,13 +317,16 @@ if analyze_button:
             }
         ))
         st.plotly_chart(fig_score, use_container_width=True)
+        
+        report_path = generate_report(final_stress, heart_rate, daily_steps, sleep_duration)
 
-    with col_desc:
-        if health_score >= 80:
-            st.success("🌟 **Excellent Health Score!** Keep up the great work!")
-        elif health_score >= 60:
-            st.info("👍 **Good Health Score.** You're on the right track!")
-        elif health_score >= 40:
-            st.warning("⚠️ **Fair Health Score.** Consider making some improvements.")
-        else:
-            st.error("🚨 **Poor Health Score.** Immediate lifestyle changes recommended.")
+
+    # with col_desc:
+    #     if health_score >= 70:
+    #         st.success("🌟 **Excellent Health Score!** Keep up the great work!")
+    #     elif health_score >= 60:
+    #         st.info("👍 **Good Health Score.** You're on the right track!")
+    #     elif health_score >= 40:
+    #         st.warning("⚠️ **Fair Health Score.** Consider making some improvements.")
+    #     else:
+    #         st.error("🚨 **Poor Health Score.** Immediate lifestyle changes recommended.")

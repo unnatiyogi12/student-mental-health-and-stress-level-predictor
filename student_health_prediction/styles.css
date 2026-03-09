@@ -96,6 +96,24 @@
     background: linear-gradient(45deg, #5a67d8, #6b46c1);
 }
 
+/* Chatbot Styling */
+
+.stChatMessage {
+    border-radius: 10px;
+    padding: 10px;
+}
+
+[data-testid="stChatMessage-user"] {
+    background-color: #e3f2fd;
+}
+
+[data-testid="stChatMessage-assistant"] {
+    background-color: #f1f8e9;
+}
+
+.stChatInput input {
+    border-radius: 10px;
+}
 /* Responsive design improvements */
 @media (max-width: 768px) {
     .main-header {
